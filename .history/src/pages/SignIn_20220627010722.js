@@ -1,30 +1,19 @@
 import React from 'react';
 import firebase from 'firebase/app';
-import { Container, Grid, Row, Col, Panel, Button, Icon, Alert } from 'rsuite';
-import { auth, database } from '../misc/firebase';
+import { Container, Grid, Row, Col, Panel, Button, Icon } from 'rsuite';
+import { auth } from '../misc/firebase';
 
 const SignIn = () => {
-  const signInWithProvider = async provider => {
-    try {
-      const { additionalUserInfo, user } = await auth.signInWithPopup(provider);
-      if (additionalUserInfo.isNewUser) {
-        await database.ref(`/profiles/${user.uid}`).set({
-          name: user.displayName,
-          createdAt: firebase.database.ServerValue.TIMESTAMP,
-        });
-      }
-      Alert.success('Signed In', 4000);
-    } catch (err) {
-      Alert.error(err.message, 4000);
-    }
+  const signInWithProvider = provider => {
+    auth.signInWithPopup(provider);
   };
 
   const onFacebookSignIn = () => {
-    signInWithProvider(new firebase.auth.FacebookAuthProvider());
+    signInWithProvider();
   };
 
   const onGoogleSignIn = () => {
-    signInWithProvider(new firebase.auth.GoogleAuthProvider());
+    signInWithProvider();
   };
 
   return (
@@ -38,11 +27,11 @@ const SignIn = () => {
                 <p>Progressive Chat Platform For Neophytes</p>
               </div>
               <div className="mt-3">
-                <Button block color="blue" onClick={onFacebookSignIn}>
+                <Button block color="blue">
                   <Icon icon="facebook" />
                   Continue With Facebook
                 </Button>
-                <Button block color="green" onClick={onGoogleSignIn}>
+                <Button block color="green">
                   <Icon icon="google" />
                   Continue With Google
                 </Button>

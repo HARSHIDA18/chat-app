@@ -15,7 +15,7 @@ const SignIn = () => {
       }
       Alert.success('Signed In', 4000);
     } catch (err) {
-      Alert.error(err.message, 4000);
+      Alert.info(err.message, 4000);
     }
   };
 
