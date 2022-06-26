@@ -13,11 +13,15 @@ function App() {
     <ProfileProvider>
       <Switch>
         <PublicRoute path="/signin">
-          <SignIn />
+          <CounterProvider>
+            <SignIn />
+          </CounterProvider>
         </PublicRoute>
 
         <PrivateRoute path="/">
-          <Home />
+          <CounterProvider>
+            <Home />
+          </CounterProvider>
         </PrivateRoute>
       </Switch>
     </ProfileProvider>
