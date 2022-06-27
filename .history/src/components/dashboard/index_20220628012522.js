@@ -2,7 +2,7 @@ import React from 'react';
 import { Drawer, Button } from 'rsuite';
 import { useProfile } from '../../context/profile.context';
 
-const Dashboard = ({ onSignOut }) => {
+const Dashboard = () => {
   const { profile } = useProfile();
   return (
     <>
@@ -14,7 +14,7 @@ const Dashboard = ({ onSignOut }) => {
         <h3>Hey,{profile.name}</h3>
       </Drawer.Body>
       <Drawer.Footer>
-        <Button block color="red" onClick={onSignOut}>
+        <Button block color="red">
           Sign Out
         </Button>
       </Drawer.Footer>

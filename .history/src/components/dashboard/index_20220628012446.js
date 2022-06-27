@@ -2,7 +2,7 @@ import React from 'react';
 import { Drawer, Button } from 'rsuite';
 import { useProfile } from '../../context/profile.context';
 
-const Dashboard = ({ onSignOut }) => {
+const Dashboard = () => {
   const { profile } = useProfile();
   return (
     <>

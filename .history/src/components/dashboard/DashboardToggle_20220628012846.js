@@ -11,7 +11,7 @@ const DashboardToggle = () => {
     auth.signOut();
     Alert.info('Signed Out', 4000);
     close();
-  }, [close]);
+  }, []);
 
   return (
     <>
@@ -20,7 +20,7 @@ const DashboardToggle = () => {
         Dashboard
       </Button>
       <Drawer full={isMobile} show={isOpen} onHide={close} placement="left">
-        <Dashboard onSignOut={onSignOut} />
+        <Dashboard />
       </Drawer>
     </>
   );

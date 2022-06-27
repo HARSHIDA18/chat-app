@@ -4,7 +4,7 @@ import Dashboard from '.';
 import { useMediaQuery, useModalState } from '../../misc/custom-hooks';
 import { auth } from '../../misc/firebase';
 
-const DashboardToggle = () => {
+const DashboardToggle = ({ onSignOut }) => {
   const { isOpen, close, open } = useModalState();
   const isMobile = useMediaQuery('(max-width:992px)');
   const onSignOut = useCallback(() => {
