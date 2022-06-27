@@ -1,18 +1,13 @@
 import React, { useState, useRef } from 'react';
-import { Alert, Button, Modal } from 'rsuite';
+import { Modal, Button, Alert } from 'rsuite';
 import AvatarEditor from 'react-avatar-editor';
 import { useModalState } from '../../misc/custom-hooks';
 import { database, storage } from '../../misc/firebase';
 import { useProfile } from '../../context/profile.context';
 
-const fileInputTypes = '.png, .jpeg, .jpg, .jfif';
+const fileInputTypes = '.png, .jpeg, .jpg';
 
-const acceptedFileTypes = [
-  'image/png',
-  'image/jpeg',
-  'image/jpg',
-  'image/jfif',
-];
+const acceptedFileTypes = ['image/png', 'image/jpeg', 'image/pjpeg'];
 const isValidFile = file => acceptedFileTypes.includes(file.type);
 
 const getBlob = canvas => {
@@ -21,7 +16,7 @@ const getBlob = canvas => {
       if (blob) {
         resolve(blob);
       } else {
-        reject(new Error('File process error'));
+        reject(new Error('File Processed Error'));
       }
     });
   });
@@ -29,21 +24,16 @@ const getBlob = canvas => {
 
 const AvatarUploadBtn = () => {
   const { isOpen, open, close } = useModalState();
-
   const { profile } = useProfile();
   const [img, setImg] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const avatarEditorRef = useRef();
-
   const onFileInputChange = ev => {
     const currFiles = ev.target.files;
-
     if (currFiles.length === 1) {
       const file = currFiles[0];
-
       if (isValidFile(file)) {
         setImg(file);
-
         open();
       } else {
         Alert.warning(`Wrong file type ${file.type}`, 4000);
@@ -52,18 +42,16 @@ const AvatarUploadBtn = () => {
   };
 
   const onUploadClick = async () => {
-    const canvas = avatarEditorRef.current.getImageScaledToCanvas();
-
+    const canvas = avatarEditorRef.current.getImageScaledCanvas();
     setIsLoading(true);
     try {
       const blob = await getBlob(canvas);
-
       const avatarFileRef = storage
         .ref(`/profile/${profile.uid}`)
         .child('avatar');
 
       const uploadAvatarResult = await avatarFileRef.put(blob, {
-        cacheControl: `public, max-age=${3600 * 24 * 3}`,
+        cacheControl: `public,max-age=${3600 * 24 * 3}`,
       });
 
       const downloadUrl = await uploadAvatarResult.ref.getDownloadURL();
@@ -71,9 +59,7 @@ const AvatarUploadBtn = () => {
       const userAvatarRef = database
         .ref(`/profiles/${profile.uid}`)
         .child('avatar');
-
       userAvatarRef.set(downloadUrl);
-
       setIsLoading(false);
       Alert.info('Avatar has been uploaded', 4000);
     } catch (err) {
@@ -89,7 +75,7 @@ const AvatarUploadBtn = () => {
           htmlFor="avatar-upload"
           className="d-block cursor-pointer padded"
         >
-          Select new Avatar
+          Select new avatar
           <input
             id="avatar-upload"
             type="file"
@@ -98,7 +84,6 @@ const AvatarUploadBtn = () => {
             onChange={onFileInputChange}
           />
         </label>
-
         <Modal show={isOpen} onHide={close}>
           <Modal.Header>
             <Modal.Title>Adjust and upload new avatar</Modal.Title>
@@ -120,12 +105,11 @@ const AvatarUploadBtn = () => {
           </Modal.Body>
           <Modal.Footer>
             <Button
-              block
               appearance="ghost"
               onClick={onUploadClick}
               disabled={isLoading}
             >
-              upload new avatar
+              Upload new avatar
             </Button>
           </Modal.Footer>
         </Modal>
