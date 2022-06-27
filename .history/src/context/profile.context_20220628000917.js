@@ -27,9 +27,6 @@ export const ProfileProvider = ({ children }) => {
           setIsLoading(false);
         });
       } else {
-        if (userRef) {
-          userRef.off();
-        }
         setProfile(null);
         setIsLoading(false);
       }
@@ -37,10 +34,6 @@ export const ProfileProvider = ({ children }) => {
 
     return () => {
       authUnsub();
-
-      if (userRef) {
-        userRef.off();
-      }
     };
   }, []);
 
