@@ -16,7 +16,7 @@ const Chat = () => {
 
   const currentRoom = rooms.find(room => room.id === chatId);
 
-  if (!currentRoom) {
+  if (currentRoom) {
     return <h6 className="text-center mt-page">Chat {chatId} not found</h6>;
   }
   return (
