@@ -12,7 +12,7 @@ const Sidebar = () => {
     if (topSidebarRef.current) {
       setHeight(topSidebarRef.current.scrolHeight);
     }
-  }, [topSidebarRef]);
+  });
 
   return (
     <div className="h=100 pt-2">
@@ -21,7 +21,7 @@ const Sidebar = () => {
         <CreateRoomBtnModal />
         <Divider>Join conversation</Divider>
       </div>
-      <ChatRoomList aboveElHeight={height} />
+      <ChatRoomList />
     </div>
   );
 };
