@@ -16,9 +16,6 @@ const DashboardToggle = () => {
         auth.signOut();
         Alert.info('Signed Out', 4000);
         close();
-      })
-      .catch(err => {
-        Alert.error(err.message, 4000);
       });
   }, [close]);
 

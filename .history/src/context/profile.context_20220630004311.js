@@ -68,8 +68,6 @@ export const ProfileProvider = ({ children }) => {
     });
     return () => {
       authUnsub();
-      database.ref('.info/connected').off();
-
       if (userRef) {
         userRef.ofF();
       }

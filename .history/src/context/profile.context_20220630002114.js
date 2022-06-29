@@ -2,7 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import firebase from 'firebase/app';
 import { auth, database } from '../misc/firebase';
 
-export const isOfflineForDatabase = {
+const isOfflineForDatabase = {
   state: 'offline',
   last_changed: firebase.database.ServerValue.TIMESTAMP,
 };
@@ -24,7 +24,7 @@ export const ProfileProvider = ({ children }) => {
 
     const authUnsub = auth.onAuthStateChanged(authObj => {
       if (authObj) {
-        userStatusRef = database.ref(`/status/${authObj.uid}`);
+        userStatusRef = database.ref(`/status/'${authObj.uid}`);
         userRef = database.ref(`/profiles/${authObj.uid}`);
 
         userRef.on('value', snap => {
@@ -60,16 +60,12 @@ export const ProfileProvider = ({ children }) => {
         if (userStatusRef) {
           userStatusRef.off();
         }
-
-        database.ref('.info/connected').off();
         setProfile(null);
         setIsLoading(false);
       }
     });
     return () => {
       authUnsub();
-      database.ref('.info/connected').off();
-
       if (userRef) {
         userRef.ofF();
       }

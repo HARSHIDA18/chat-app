@@ -60,16 +60,12 @@ export const ProfileProvider = ({ children }) => {
         if (userStatusRef) {
           userStatusRef.off();
         }
-
-        database.ref('.info/connected').off();
         setProfile(null);
         setIsLoading(false);
       }
     });
     return () => {
       authUnsub();
-      database.ref('.info/connected').off();
-
       if (userRef) {
         userRef.ofF();
       }
