@@ -1,9 +1,8 @@
 import React, { memo } from 'react';
-import { Icon, ButtonToolbar } from 'rsuite';
+import { Icon } from 'rsuite';
 import { Link } from 'react-router-dom';
 import { useCurrentRoom } from '../../../context/current-room.context';
 import { useMediaQuery } from '../../../misc/custom-hooks';
-import RoomInfoBtnModal from './RoomInfoBtnModal';
 
 const Top = () => {
   const name = useCurrentRoom(v => v.name);
@@ -25,13 +24,6 @@ const Top = () => {
           />
           <span className="text-disappear">{name}</span>
         </h4>
-
-        <ButtonToolbar className="ws-nowrap">todo</ButtonToolbar>
-      </div>
-
-      <div className="d-flex justify-content-between align-items-center">
-        <span>todo</span>
-        <RoomInfoBtnModal />
       </div>
     </div>
   );
