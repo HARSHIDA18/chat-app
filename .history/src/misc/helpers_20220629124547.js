@@ -1,9 +1,9 @@
 export function getNameInitials(name) {
-  const splitName = name.toUpperCase().split('');
+  const splitName = name.toUpperCase().split(' ');
+
   if (splitName.length > 1) {
     return splitName[0][0] + splitName[1][0];
   }
-
   return splitName[0][0];
 }
 
@@ -20,17 +20,18 @@ export async function getUserUpdates(userId, keyToUpdate, value, db) {
   updates[`/profiles/${userId}/${keyToUpdate}`] = value;
 
   const getMsgs = db
-    .ref('/messages')
-    .orderByChild('author/uid')
+    .ref(`/messages`)
+    .orderByChild(`author/uid`)
     .equalTo(userId)
-    .once('value');
+    .once(`value`);
+
   const getRooms = db
     .ref('/rooms')
-    .orderByChild('lastMessage/author/uid')
+    .orderByChild(`lastMessage/author/uid`)
     .equalTo(userId)
-    .once('value');
+    .once(`value`);
 
-  const [mSnap, rSnap] = await Promise.all([getMsgs, getRooms]);
+  const [mSnap, rSnap] = await Promise.all(getMsgs, getRooms);
 
   mSnap.forEach(msgSnap => {
     updates[`/messages/${msgSnap.key}/author/${keyToUpdate}`] = value;

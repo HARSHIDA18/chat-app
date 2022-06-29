@@ -1,9 +1,9 @@
 export function getNameInitials(name) {
-  const splitName = name.toUpperCase().split('');
+  const splitName = name.toUpperCase().split('  ');
+
   if (splitName.length > 1) {
     return splitName[0][0] + splitName[1][0];
   }
-
   return splitName[0][0];
 }
 
@@ -14,17 +14,17 @@ export function transformToArrWithId(snapVal) {
       })
     : [];
 }
-
-export async function getUserUpdates(userId, keyToUpdate, value, db) {
+export async function getUserUpdate(userId, keyToUpdate, value, database) {
   const updates = {};
   updates[`/profiles/${userId}/${keyToUpdate}`] = value;
 
-  const getMsgs = db
+  const getMsgs = database
     .ref('/messages')
     .orderByChild('author/uid')
     .equalTo(userId)
     .once('value');
-  const getRooms = db
+
+  const getRooms = database
     .ref('/rooms')
     .orderByChild('lastMessage/author/uid')
     .equalTo(userId)
@@ -37,8 +37,8 @@ export async function getUserUpdates(userId, keyToUpdate, value, db) {
   });
 
   rSnap.forEach(roomSnap => {
-    updates[`/rooms/${roomSnap.key}/lastMessage/author/${keyToUpdate}`] = value;
+    updates[`/messages/${roomSnap.key}/lastMessage/author/${keyToUpdate}`] =
+      value;
   });
-
   return updates;
 }
