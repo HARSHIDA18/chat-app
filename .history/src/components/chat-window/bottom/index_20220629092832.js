@@ -18,12 +18,9 @@ function assembleMessage(profile, chatId) {
   };
 }
 const Bottom = () => {
-  const [input, setInput] = useState(``);
-  const [isLoading, setIsLoading] = useState(false);
-
+  const { input, setInput } = useState('');
   const { chatId } = useParams();
   const { profile } = useProfile();
-
   const onInputChange = useCallback(value => {
     setInput(value);
   }, []);
@@ -43,23 +40,13 @@ const Bottom = () => {
       ...msgData,
       msgId: messageId,
     };
-    setIsLoading(true);
 
     try {
       await database.ref().update(updates);
 
-      setInput(``);
-      setIsLoading(false);
+      setInput('');
     } catch (err) {
-      setIsLoading(false);
       Alert.error(err.message);
-    }
-  };
-
-  const onKeyDown = ev => {
-    if (ev.keyCode === 13) {
-      ev.preventDefault();
-      onSendClick();
     }
   };
   return (
@@ -69,13 +56,11 @@ const Bottom = () => {
           placeholder="Write a new message here..."
           value={input}
           onChange={onInputChange}
-          onKeyDown={onKeyDown}
         />
         <InputGroup.Button
           color="blue"
           appearance="primary"
           onClick={onSendClick}
-          disabled={isLoading}
         >
           <Icon icon="send" />
         </InputGroup.Button>

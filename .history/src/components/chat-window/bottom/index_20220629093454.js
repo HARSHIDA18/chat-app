@@ -56,12 +56,6 @@ const Bottom = () => {
     }
   };
 
-  const onKeyDown = ev => {
-    if (ev.keyCode === 13) {
-      ev.preventDefault();
-      onSendClick();
-    }
-  };
   return (
     <div>
       <InputGroup>
@@ -69,7 +63,6 @@ const Bottom = () => {
           placeholder="Write a new message here..."
           value={input}
           onChange={onInputChange}
-          onKeyDown={onKeyDown}
         />
         <InputGroup.Button
           color="blue"
