@@ -10,7 +10,7 @@ import ProfileInfoBtnModal from './ProfileInfoBtnModal';
 
 const MessageItem = ({ message, handleAdmin }) => {
   const { author, created, text } = message;
-  const [selfRef, isHoverd] = useHover();
+  const [selfRef, isHover] = useHover();
   const isAdmin = useCurrentRoom(v => v.isAdmin);
   const admins = useCurrentRoom(v => v.admins);
 
@@ -19,10 +19,7 @@ const MessageItem = ({ message, handleAdmin }) => {
   const canGrantAdmin = isAdmin && !isAuthor;
 
   return (
-    <li
-      className={`padded mb-1 cursor-pointer ${isHoverd ? 'bg-black-02' : ''}`}
-      ref={selfRef}
-    >
+    <li className="padded mb-1" ref={selfRef}>
       <div className="d-flex align-items-center font-bolder mb-1">
         <PresenceDot uid={author.uid} />
 
