@@ -1,9 +1,8 @@
-/* eslint-disable arrow-body-style */
 import React, { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { Alert } from 'rsuite';
 import { database } from '../../../misc/firebase';
-import { transformToArrWithId } from '../../../misc/helpers';
+import transformArrayWithId from '../../../misc/helpers';
 import MessageItem from './MessageItem';
 
 const Messages = () => {
@@ -21,7 +20,7 @@ const Messages = () => {
       .orderByChild('roomId')
       .equalTo(chatId)
       .on('value', snap => {
-        const data = transformToArrWithId(snap.val());
+        const data = transformArrayWithId(snap.val());
 
         setMessages(data);
       });
@@ -40,11 +39,9 @@ const Messages = () => {
       await adminsRef.transaction(admins => {
         if (admins) {
           if (admins[uid]) {
-            // eslint-disable-next-line no-param-reassign
             admins[uid] = null;
             alertMsg = 'Admin Permission Removed';
           } else {
-            // eslint-disable-next-line no-param-reassign
             admins[uid] = true;
             alertMsg = 'Admin Permission Granted';
           }

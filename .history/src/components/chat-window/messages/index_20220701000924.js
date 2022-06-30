@@ -40,11 +40,9 @@ const Messages = () => {
       await adminsRef.transaction(admins => {
         if (admins) {
           if (admins[uid]) {
-            // eslint-disable-next-line no-param-reassign
             admins[uid] = null;
             alertMsg = 'Admin Permission Removed';
           } else {
-            // eslint-disable-next-line no-param-reassign
             admins[uid] = true;
             alertMsg = 'Admin Permission Granted';
           }

@@ -7,8 +7,8 @@ import PresenceDot from '../../PresenceDot';
 import ProfileAvatar from '../../ProfileAvatar';
 import ProfileInfoBtnModal from './ProfileInfoBtnModal';
 
-const MessageItem = ({ message, handleAdmin }) => {
-  const { author, created, text } = message;
+const MessageItem = ({ message }) => {
+  const { author, createdAt, text } = message;
 
   const isAdmin = useCurrentRoom(v => v.isAdmin);
   const admins = useCurrentRoom(v => v.admins);
@@ -21,11 +21,10 @@ const MessageItem = ({ message, handleAdmin }) => {
     <li className="padded mb-1">
       <div className="d-flex align-items-center font-bolder mb-1">
         <PresenceDot uid={author.uid} />
-
         <ProfileAvatar
           src={author.avatar}
           name={author.name}
-          className="ml-1 "
+          className="ml-1"
           size="xs"
         />
 
@@ -35,19 +34,18 @@ const MessageItem = ({ message, handleAdmin }) => {
           className="p-0 ml-1 text-black"
         >
           {canGrantAdmin && (
-            <Button block onClick={() => handleAdmin(author.uid)} color="blue">
+            <Button block onClick={() => {}} color="blue">
               {isMsgAuthorAdmin
-                ? 'Remove Admin Permission '
-                : 'Give Admin in this Room'}
+                ? 'Remove admin permission'
+                : 'Give admin in this room'}
             </Button>
           )}
         </ProfileInfoBtnModal>
         <TimeAgo
-          datetime={created}
-          className="font-normal text-black-45 ml-2 "
+          datetime={createdAt}
+          className="font-normal text-black-45 ml-2"
         />
       </div>
-
       <div>
         <span className="word-break-all">{text}</span>
       </div>

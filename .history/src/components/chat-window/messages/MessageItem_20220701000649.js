@@ -7,6 +7,7 @@ import PresenceDot from '../../PresenceDot';
 import ProfileAvatar from '../../ProfileAvatar';
 import ProfileInfoBtnModal from './ProfileInfoBtnModal';
 
+// eslint-disable-next-line arrow-body-style
 const MessageItem = ({ message, handleAdmin }) => {
   const { author, created, text } = message;
 
