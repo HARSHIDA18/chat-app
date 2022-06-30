@@ -60,7 +60,7 @@ const Messages = () => {
 
   const handleLike = useCallback(async msgId => {
     const { uid } = auth.currentUser;
-    const messageRef = database.ref(`/messages/${msgId}`);
+    const messageRef = database.ref(`/rmessages/${msgId}/admins`);
 
     let alertMsg;
 
@@ -78,7 +78,7 @@ const Messages = () => {
           }
 
           msg.likes[uid] = true;
-          alertMsg = 'Like added';
+          alertMsg = 'Admin Permission Granted';
         }
       }
       return msg;

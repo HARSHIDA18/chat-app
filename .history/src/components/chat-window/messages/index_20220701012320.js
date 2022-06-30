@@ -1,9 +1,8 @@
-/* eslint-disable no-param-reassign */
 /* eslint-disable arrow-body-style */
 import React, { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { Alert } from 'rsuite';
-import { auth, database } from '../../../misc/firebase';
+import { database } from '../../../misc/firebase';
 import { transformToArrWithId } from '../../../misc/helpers';
 import MessageItem from './MessageItem';
 
@@ -58,34 +57,29 @@ const Messages = () => {
     [chatId]
   );
 
-  const handleLike = useCallback(async msgId => {
-    const { uid } = auth.currentUser;
-    const messageRef = database.ref(`/messages/${msgId}`);
 
-    let alertMsg;
+  const handleLike=useCallback((msgId)=>{
+    const messageRef = database.ref(`/rmessages/${messageId}/admins`);
 
-    await messageRef.transaction(msg => {
-      if (msg) {
-        if (msg.likes && msg.likes[uid]) {
-          msg.likeCount -= 1;
-          msg.likes[uid] = null;
-          alertMsg = 'Like removed';
-        } else {
-          msg.likeCount += 1;
+      let alertMsg;
 
-          if (!msg.likes) {
-            msg.likes = {};
+      await messageRef.transaction(admins => {
+        if (admins) {
+          if (admins[uid]) {
+            // eslint-disable-next-line no-param-reassign
+            admins[uid] = null;
+            alertMsg = 'Admin Permission Removed';
+          } else {
+            // eslint-disable-next-line no-param-reassign
+            admins[uid] = true;
+            alertMsg = 'Admin Permission Granted';
           }
-
-          msg.likes[uid] = true;
-          alertMsg = 'Like added';
         }
-      }
-      return msg;
-    });
+        return admins;
+      });
 
-    Alert.info(alertMsg, 4000);
-  }, []);
+      Alert.info(alertMsg, 4000);
+  },[])
 
   return (
     <ul className="msg-list  custom-scroll ">
@@ -93,12 +87,7 @@ const Messages = () => {
 
       {canShowMessages &&
         messages.map(msg => (
-          <MessageItem
-            key={msg.id}
-            message={msg}
-            handleAdmin={handleAdmin}
-            handleLike={handleLike}
-          />
+          <MessageItem key={msg.id} message={msg} handleAdmin={handleAdmin} handleLike={handleLike}/>
         ))}
     </ul>
   );

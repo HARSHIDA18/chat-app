@@ -9,8 +9,14 @@ import ProfileAvatar from '../../ProfileAvatar';
 import ProfileInfoBtnModal from './ProfileInfoBtnModal';
 import IconBtnControl from './IconBtnControl';
 
-const MessageItem = ({ message, handleAdmin, handleLike }) => {
-  const { author, created, text, likes, likeCount } = message;
+const MessageItem = ({
+  message,
+  handleAdmin,
+  handleLike,
+  likes,
+  likeCount,
+}) => {
+  const { author, created, text } = message;
   const [selfRef, isHoverd] = useHover();
   const isMobile = useMediaQuery('(max-width:992px)');
   const isAdmin = useCurrentRoom(v => v.isAdmin);

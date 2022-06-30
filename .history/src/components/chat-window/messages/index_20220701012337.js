@@ -1,9 +1,8 @@
-/* eslint-disable no-param-reassign */
 /* eslint-disable arrow-body-style */
 import React, { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { Alert } from 'rsuite';
-import { auth, database } from '../../../misc/firebase';
+import { database } from '../../../misc/firebase';
 import { transformToArrWithId } from '../../../misc/helpers';
 import MessageItem from './MessageItem';
 
@@ -59,29 +58,23 @@ const Messages = () => {
   );
 
   const handleLike = useCallback(async msgId => {
-    const { uid } = auth.currentUser;
-    const messageRef = database.ref(`/messages/${msgId}`);
+    const messageRef = database.ref(`/rmessages/${messageId}/admins`);
 
     let alertMsg;
 
-    await messageRef.transaction(msg => {
-      if (msg) {
-        if (msg.likes && msg.likes[uid]) {
-          msg.likeCount -= 1;
-          msg.likes[uid] = null;
-          alertMsg = 'Like removed';
+    await messageRef.transaction(admins => {
+      if (admins) {
+        if (admins[uid]) {
+          // eslint-disable-next-line no-param-reassign
+          admins[uid] = null;
+          alertMsg = 'Admin Permission Removed';
         } else {
-          msg.likeCount += 1;
-
-          if (!msg.likes) {
-            msg.likes = {};
-          }
-
-          msg.likes[uid] = true;
-          alertMsg = 'Like added';
+          // eslint-disable-next-line no-param-reassign
+          admins[uid] = true;
+          alertMsg = 'Admin Permission Granted';
         }
       }
-      return msg;
+      return admins;
     });
 
     Alert.info(alertMsg, 4000);
