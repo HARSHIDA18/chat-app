@@ -1,4 +1,3 @@
-/* eslint-disable no-param-reassign */
 export function getNameInitials(name) {
   const splitName = name.toUpperCase().split(' ');
 
