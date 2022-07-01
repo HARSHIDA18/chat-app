@@ -65,38 +65,35 @@ const Bottom = () => {
     }
   };
 
-  const afterUpload = useCallback(
-    async files => {
-      setIsLoading(true);
-      const updates = {};
-      files.forEach(file => {
-        const msgData = assembleMessage(profile, chatId);
-        msgData.file = file;
+  const afterUpload = useCallback(async files => {
+    setIsLoading(true);
+    const updates = {};
+    files.forEach(file => {
+      const msgData = assembleMessage(profile, chatId);
+      msgData.file = file;
 
-        const messageId = database.ref('messages').push().key;
+      const messageId = database.ref('messages').push().key;
 
-        updates[`/messages/${messageId}`] = msgData;
-      });
+      updates[`/messages/${messageId}`] = msgData;
+    });
 
-      const lastMsgId = Object.keys(updates).pop();
+    const lastMsgId = Object.keys(updates).pop();
 
-      updates[`/rooms/${chatId}/lastMessage`] = {
-        ...updates[lastMsgId],
-        msgId: lastMsgId,
-      };
+    updates[`/rooms/${chatId}/lastMessage`] = {
+      ...updates[lastMsgId],
+      msgId: lastMsgId,
+    };
 
-      try {
-        await database.ref().update(updates);
+    try {
+      await database.ref().update(updates);
 
-        setInput(``);
-        setIsLoading(false);
-      } catch (err) {
-        setIsLoading(false);
-        Alert.error(err.message);
-      }
-    },
-    [chatId, profile]
-  );
+      setInput(``);
+      setIsLoading(false);
+    } catch (err) {
+      setIsLoading(false);
+      Alert.error(err.message);
+    }
+  }, []);
   return (
     <div>
       <InputGroup>
