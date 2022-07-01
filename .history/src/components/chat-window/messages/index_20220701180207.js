@@ -1,4 +1,3 @@
-/* eslint-disable no-param-reassign */
 /* eslint-disable consistent-return */
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useParams } from 'react-router';
