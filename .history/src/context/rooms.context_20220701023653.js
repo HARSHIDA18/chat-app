@@ -1,8 +1,9 @@
-import { useCallback, useState, useEffect, useRef } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import { database } from './firebase';
 
 export function useModalState(defaultValue = false) {
   const [isOpen, setIsOpen] = useState(defaultValue);
+
   const open = useCallback(() => setIsOpen(true), []);
   const close = useCallback(() => setIsOpen(false), []);
 
@@ -36,9 +37,11 @@ export function usePresence(uid) {
     userStatusRef.on('value', snap => {
       if (snap.exists()) {
         const data = snap.val();
+
         setPresence(data);
       }
     });
+
     return () => {
       userStatusRef.off();
     };
@@ -49,9 +52,12 @@ export function usePresence(uid) {
 
 export function useHover() {
   const [value, setValue] = useState(false);
+
   const ref = useRef(null);
+
   const handleMouseOver = () => setValue(true);
   const handleMouseOut = () => setValue(false);
+
   useEffect(
     () => {
       const node = ref.current;
@@ -64,9 +70,9 @@ export function useHover() {
         node.removeEventListener('mouseout', handleMouseOut);
       };
     },
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [ref.current] // Recall only if ref changes
   );
+
   return [ref, value];
 }

@@ -1,6 +1,3 @@
-/* eslint-disable no-alert */
-/* eslint-disable no-param-reassign */
-/* eslint-disable arrow-body-style */
 import React, { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { Alert } from 'rsuite';
@@ -68,16 +65,21 @@ const Messages = () => {
     await messageRef.transaction(msg => {
       if (msg) {
         if (msg.likes && msg.likes[uid]) {
+          // eslint-disable-next-line no-param-reassign
           msg.likeCount -= 1;
+          // eslint-disable-next-line no-param-reassign
           msg.likes[uid] = null;
           alertMsg = 'Like removed';
         } else {
+          // eslint-disable-next-line no-param-reassign
           msg.likeCount += 1;
 
           if (!msg.likes) {
+            // eslint-disable-next-line no-param-reassign
             msg.likes = {};
           }
 
+          // eslint-disable-next-line no-param-reassign
           msg.likes[uid] = true;
           alertMsg = 'Like added';
         }
@@ -90,17 +92,18 @@ const Messages = () => {
 
   const handleDelete = useCallback(
     async msgId => {
-      if (!window.confirm('Delete this message')) {
+      // eslint-disable-next-line no-alert
+      if (window.confirm('Delete this message')) {
         return;
       }
       const isLast = messages[messages.length - 1].id === msgId;
+
       const updates = {};
       updates[`/messages/${msgId}`] = null;
-
       if (isLast && messages.length > 1) {
         updates[`/rooms/${chatId}/lastMessage`] = {
           ...messages[messages.length - 2],
-          msgId: messages[messages.length - 1].id,
+          msgId: messages[messages.length - 2].id,
         };
       }
 
@@ -110,7 +113,7 @@ const Messages = () => {
 
       try {
         await database.ref().update(updates);
-        Alert.info('Message has been deleted...');
+        Alert.info('Message has been deleted');
       } catch (err) {
         Alert.error(err.message);
       }

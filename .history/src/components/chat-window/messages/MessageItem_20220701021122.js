@@ -11,7 +11,7 @@ import IconBtnControl from './IconBtnControl';
 
 const MessageItem = ({ message, handleAdmin, handleLike, handleDelete }) => {
   const { author, created, text, likes, likeCount } = message;
-  const [selfRef, isHovered] = useHover();
+  const [selfRef, isHoverd] = useHover();
   const isMobile = useMediaQuery('(max-width:992px)');
   const isAdmin = useCurrentRoom(v => v.isAdmin);
   const admins = useCurrentRoom(v => v.admins);
@@ -20,12 +20,12 @@ const MessageItem = ({ message, handleAdmin, handleLike, handleDelete }) => {
   const isAuthor = auth.currentUser.uid === author.uid;
   const canGrantAdmin = isAdmin && !isAuthor;
 
-  const canShowIcons = isMobile || isHovered;
+  const canShowIcons = isMobile || isHoverd;
   const isLiked = likes && Object.keys(likes).includes(auth.currentUser.uid);
 
   return (
     <li
-      className={`padded mb-1 cursor-pointer ${isHovered ? 'bg-black-02' : ''}`}
+      className={`padded mb-1 cursor-pointer ${isHoverd ? 'bg-black-02' : ''}`}
       ref={selfRef}
     >
       <div className="d-flex align-items-center font-bolder mb-1">
