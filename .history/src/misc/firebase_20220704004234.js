@@ -28,7 +28,4 @@ if (messaging) {
   messaging.usePublicVapidKey(
     'BNHT7ZgYTlPKwkePoNZob-T-phpmAfG5-2uYaZ_llkITIf6bgmaVCBzXN_NTNjf6wCQ3eFnUpIcJei4xi34i6Zk'
   );
-  messaging.onMessage(data => {
-    console.log(data);
-  });
 }

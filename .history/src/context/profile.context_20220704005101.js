@@ -1,4 +1,4 @@
-import React, { createContext, useState, useContext, useEffect } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 import firebase from 'firebase/app';
 import { auth, database, messaging } from '../misc/firebase';
 
@@ -21,9 +21,8 @@ export const ProfileProvider = ({ children }) => {
   useEffect(() => {
     let userRef;
     let userStatusRef;
-    let tokenRefreshUnsub;
 
-    const authUnsub = auth.onAuthStateChanged(async authObj => {
+    const authUnsub = auth.onAuthStateChanged(authObj => {
       if (authObj) {
         userStatusRef = database.ref(`/status/${authObj.uid}`);
         userRef = database.ref(`/profiles/${authObj.uid}`);
@@ -38,7 +37,6 @@ export const ProfileProvider = ({ children }) => {
             uid: authObj.uid,
             email: authObj.email,
           };
-
           setProfile(data);
           setIsLoading(false);
         });
@@ -57,63 +55,48 @@ export const ProfileProvider = ({ children }) => {
         });
 
         if (messaging) {
-          try {
-            const currentToken = await messaging.getToken();
-            if (currentToken) {
-              await database
-                .ref(`/fcm_tokens/${currentToken}`)
-                .set(authObj.uid);
-            }
-          } catch (err) {
-            console.log('An error occurred while retrieving token. ', err);
-          }
-
-          tokenRefreshUnsub = messaging.onTokenRefresh(async () => {
-            try {
-              const currentToken = await messaging.getToken();
+          messaging
+            .getToken()
+            .then(currentToken => {
               if (currentToken) {
-                await database
-                  .ref(`/fcm_tokens/${currentToken}`)
-                  .set(authObj.uid);
+                sendTokenToServer(currentToken);
+                updateUIForPushEnabled(currentToken);
+              } else {
+                // Show permission request.
+                console.log(
+                  'No Instance ID token available. Request permission to generate one.'
+                );
+                // Show permission UI.
+                updateUIForPushPermissionRequired();
+                setTokenSentToServer(false);
               }
-            } catch (err) {
-              console.log('An error occurred while retrieving token. ', err);
-            }
-          });
+            })
+            .catch(err => {
+              console.log('An error occured while retrieving token.', err);
+              console.log('Error retrieving Instance ID token.', err);
+              setTokenSentToServer(false);
+            });
         }
       } else {
         if (userRef) {
-          userRef.off();
+          userRef.ofF();
         }
-
         if (userStatusRef) {
           userStatusRef.off();
         }
 
-        if (tokenRefreshUnsub) {
-          tokenRefreshUnsub();
-        }
-
         database.ref('.info/connected').off();
-
         setProfile(null);
         setIsLoading(false);
       }
     });
-
     return () => {
       authUnsub();
-
       database.ref('.info/connected').off();
 
       if (userRef) {
-        userRef.off();
+        userRef.ofF();
       }
-
-      if (tokenRefreshUnsub) {
-        tokenRefreshUnsub();
-      }
-
       if (userStatusRef) {
         userStatusRef.off();
       }

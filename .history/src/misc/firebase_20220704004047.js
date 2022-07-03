@@ -19,16 +19,3 @@ const app = firebase.initializeApp(config);
 export const auth = app.auth();
 export const database = app.database();
 export const storage = app.storage();
-
-export const messaging = firebase.messaging.isSupported()
-  ? app.messaging()
-  : null;
-
-if (messaging) {
-  messaging.usePublicVapidKey(
-    'BNHT7ZgYTlPKwkePoNZob-T-phpmAfG5-2uYaZ_llkITIf6bgmaVCBzXN_NTNjf6wCQ3eFnUpIcJei4xi34i6Zk'
-  );
-  messaging.onMessage(data => {
-    console.log(data);
-  });
-}
